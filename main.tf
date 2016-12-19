@@ -51,7 +51,7 @@ resource "aws_eip" "jenkins" {
   vpc      = true
 }
 
-resource "aws_route53_record" "web" {
+resource "aws_route53_record" "jenkins" {
   zone_id = "${data.aws_route53_zone.domain.zone_id}"
   name    = "jenkins.${data.aws_route53_zone.domain.name}"
   type    = "A"

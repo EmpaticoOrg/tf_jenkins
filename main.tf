@@ -23,8 +23,8 @@ data "aws_route53_zone" "domain" {
 }
 
 resource "aws_iam_instance_profile" "consul" {
-  name  = "consul"
-  roles = ["ConsulInit"]
+  name_prefix = "consul"
+  roles       = ["ConsulInit"]
 }
 
 resource "aws_instance" "jenkins" {

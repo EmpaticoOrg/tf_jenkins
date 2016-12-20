@@ -24,6 +24,7 @@ data "aws_route53_zone" "domain" {
 
 data "aws_route53_zone" "environment" {
   name = "${var.environment}."
+  private_zone = true
 }
 
 resource "aws_iam_instance_profile" "consul" {

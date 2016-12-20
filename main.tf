@@ -22,6 +22,10 @@ data "aws_route53_zone" "domain" {
   name = "${var.domain}."
 }
 
+data "aws_route53_zone" "environment" {
+  name = "${var.environment}."
+}
+
 resource "aws_iam_instance_profile" "consul" {
   name_prefix = "consul"
   roles       = ["ConsulInit"]
@@ -57,6 +61,14 @@ resource "aws_route53_record" "jenkins" {
   type    = "A"
   ttl     = "300"
   records = ["${aws_eip.jenkins.public_ip}"]
+}
+
+resource "aws_route53_record" "jenkins_private" {
+  zone_id = "${data.aws_route53_zone.environment.zone_id}"
+  name    = "jenkins.${data.aws_route53_zone.environment.name}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.jenkins.private_ip}"]
 }
 
 resource "aws_security_group" "jenkins_host_sg" {

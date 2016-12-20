@@ -11,10 +11,10 @@ data "aws_ami" "base_ami" {
   most_recent = true
 }
 
-data "aws_security_group" "prometheus" {
+data "aws_security_group" "riemann" {
   filter {
     name   = "tag:Name"
-    values = ["${var.environment}-prometheus-sg"]
+    values = ["${var.environment}-riemann-sg"]
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_instance" "jenkins" {
 
   vpc_security_group_ids = [
     "${aws_security_group.jenkins_host_sg.id}",
-    "${data.aws_security_group.prometheus.id}",
+    "${data.aws_security_group.riemann.id}",
   ]
 
   tags {

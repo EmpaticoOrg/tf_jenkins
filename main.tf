@@ -11,10 +11,10 @@ data "aws_ami" "base_ami" {
   most_recent = true
 }
 
-data "aws_security_group" "riemann" {
+data "aws_security_group" "core" {
   filter {
     name   = "tag:Name"
-    values = ["${var.environment}-riemann-sg"]
+    values = ["core-to-${var.environment}-sg"]
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_instance" "jenkins" {
 
   vpc_security_group_ids = [
     "${aws_security_group.jenkins_host_sg.id}",
-    "${data.aws_security_group.riemann.id}",
+    "${data.aws_security_group.core.id}",
   ]
 
   tags {

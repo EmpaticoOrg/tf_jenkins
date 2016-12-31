@@ -46,7 +46,7 @@ resource "aws_instance" "jenkins" {
   ]
 
   tags {
-    Name = "${var.environment}-${var.app}-${var.role}"
+    Name = "${var.environment}-${var.role}-${var.app}"
     Role = "${var.role}"
   }
 }
@@ -73,7 +73,7 @@ resource "aws_route53_record" "jenkins_private" {
 }
 
 resource "aws_security_group" "jenkins_host_sg" {
-  name        = "${var.environment}-${var.app}-${var.role}-host"
+  name        = "${var.environment}-${var.role}-${var.app}-host"
   description = "Allow SSH and HTTP to Jenkins"
   vpc_id      = "${data.aws_vpc.environment.id}"
 
@@ -107,6 +107,6 @@ resource "aws_security_group" "jenkins_host_sg" {
   }
 
   tags {
-    Name = "${var.environment}-${var.app}-${var.role}-host-sg"
+    Name = "${var.environment}-${var.role}-${var.app}-host-sg"
   }
 }

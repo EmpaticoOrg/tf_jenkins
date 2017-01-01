@@ -51,17 +51,12 @@ resource "aws_instance" "jenkins" {
   }
 }
 
-resource "aws_eip" "jenkins" {
-  instance = "${aws_instance.jenkins.id}"
-  vpc      = true
-}
-
 resource "aws_route53_record" "jenkins" {
   zone_id = "${data.aws_route53_zone.domain.zone_id}"
   name    = "jenkins.${data.aws_route53_zone.domain.name}"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_eip.jenkins.public_ip}"]
+  records = ["${aws_instance.jenkins.public_ip}"]
 }
 
 resource "aws_route53_record" "jenkins_private" {
@@ -73,7 +68,7 @@ resource "aws_route53_record" "jenkins_private" {
 }
 
 resource "aws_security_group" "jenkins_host_sg" {
-  name        = "${var.environment}-${var.role}-${var.app}-host"
+  name        = "${var.environment}-${var.role}-${var.app}"
   description = "Allow SSH and HTTP to Jenkins"
   vpc_id      = "${data.aws_vpc.environment.id}"
 
@@ -84,7 +79,6 @@ resource "aws_security_group" "jenkins_host_sg" {
     cidr_blocks = ["${data.aws_vpc.environment.cidr_block}"]
   }
 
-  # HTTP access from the VPC
   ingress {
     from_port   = 8080
     to_port     = 8080
@@ -100,6 +94,6 @@ resource "aws_security_group" "jenkins_host_sg" {
   }
 
   tags {
-    Name = "${var.environment}-${var.role}-${var.app}-host-sg"
+    Name = "${var.environment}-${var.role}-${var.app}-sg"
   }
 }

@@ -32,7 +32,7 @@ variable "role" {
 }
 
 output "jenkins_host_address" {
-  value = ["${aws_eip.jenkins.public_ip}"]
+  value = ["${aws_instance.jenkins.public_ip}"]
 }
 
 output "jenkins_private_address" {

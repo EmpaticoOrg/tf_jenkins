@@ -23,7 +23,7 @@ data "aws_route53_zone" "domain" {
 }
 
 data "aws_route53_zone" "environment" {
-  name = "${var.environment}."
+  name         = "${var.environment}."
   private_zone = true
 }
 
@@ -37,13 +37,24 @@ resource "aws_instance" "jenkins" {
   instance_type        = "${var.instance_type}"
   key_name             = "${var.key_name}"
   subnet_id            = "${var.public_subnet_id}"
-  user_data            = "${file("${path.module}/files/jenkins_bootstrap.sh")}"
   iam_instance_profile = "${aws_iam_instance_profile.consul.name}"
 
   vpc_security_group_ids = [
     "${aws_security_group.jenkins_host_sg.id}",
     "${data.aws_security_group.core.id}",
   ]
+
+  connection {
+    bastion_host = "bastion.${var.domain}"
+    host         = "${self.private_ip}"
+    user         = "ubuntu"
+    private_key  = "${file(var.key_path)}"
+    agent        = true
+  }
+
+  provisioner "remote-exec" {
+    script = "${path.module}/files/jenkins_bootstrap.sh"
+  }
 
   tags {
     Name = "${var.environment}-${var.role}-${var.app}"

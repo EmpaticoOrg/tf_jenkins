@@ -6,6 +6,10 @@ variable "key_name" {
   description = "The AWS key pair to use for resources."
 }
 
+variable "key_path" {
+  description = "The path to the AWS key."
+}
+
 variable "public_subnet_id" {
   description = "The public subnet to populate."
 }

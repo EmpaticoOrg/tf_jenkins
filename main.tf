@@ -57,8 +57,8 @@ resource "aws_instance" "jenkins" {
   }
 
   tags {
-    Name = "${var.environment}-${var.role}-${var.app}"
-    Role = "${var.role}"
+    Name        = "${var.environment}-${var.role}-${var.app}"
+    Role        = "${var.role}"
     Environment = "${var.environment}"
   }
 }

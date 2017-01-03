@@ -61,6 +61,10 @@ resource "aws_instance" "jenkins" {
     Role        = "${var.role}"
     Environment = "${var.environment}"
   }
+
+  lifecycle {
+    ignore_changes = ["tags"]
+  }
 }
 
 resource "aws_route53_record" "jenkins" {
